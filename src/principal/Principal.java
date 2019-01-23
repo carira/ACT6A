@@ -14,38 +14,55 @@ public class Principal {
 		// TODO Auto-generated method stub
 		System.out.println("creando");
 		
-		Calendar fecha=Calendar.getInstance();
+		
+		Session session = HibernateUtilities.getSessionFactory().openSession();
+	
+	
+	cargarTablas(session);
+	recuperarDatos(session);
+	
+	session.close();
+	HibernateUtilities.getSessionFactory().close();
+	
+}
 
-		
-		Session session = HibernateUtilities.getSessionFactory().openSession();		
-		session.beginTransaction();
-		
-		Empresa emp = new Empresa("B21000760N", "C/ canovas, 40", 25, "Carles S.L");
-			
-		Item item = new Item("carles", 23000);
-		
-		Date time= new Date(fecha.getTimeInMillis());
-		Pedido ped = new Pedido(time);
-		
-		
-		session.save(emp);
-		session.save(item);
-		session.save(ped);
-		
-		session.getTransaction().commit();
-		
-		/*
-		session.beginTransaction();
-		
-		
-		
-		session.getTransaction().commit();
-*/
-		session.close();	
-		HibernateUtilities.getSessionFactory().close();
-		
-		
-		
-	}
+private static void cargarTablas(Session session) {
+	
+	session.beginTransaction();
+	Empresa emp = new Empresa("21000760-N", "Carles S.L", 25, "C/ canovas, 40");
+
+	Calendar fecha=Calendar.getInstance();
+	Date time= new Date(fecha.getTimeInMillis());
+	Pedido ped = new Pedido(time);
+	
+	Item item = new Item("Pepinos", 23000);
+	
+	session.saveOrUpdate(emp);
+	session.saveOrUpdate(ped);
+	session.saveOrUpdate(item);
+	session.getTransaction().commit();
+	
+}
+
+private static void recuperarDatos(Session session) {
+	session.beginTransaction();
+	Empresa emp = session.get(Empresa.class, "21000760-N");
+	Pedido ped = session.get(Pedido.class, 1);
+	Item item = session.get(Item.class, 1);
+	session.getTransaction().commit();
+	
+	
+	
+	
+	
+	System.out.println("\n"+"\n"+"\n" );
+	System.out.println("-----------------------------------------------------------------------------" );
+	System.out.println("Empresa recuperada: "+emp.getNombre()+"\n Direccion: "+emp.getDireccion()+"\n CIF: "+emp.getCif()+"\n Empleados: "+emp.getEmleados());
+	System.out.println("Pedido recuperado Dia: "+ped.getFecha());
+	System.out.println("Item recuperado: "+item.getNombre()+"\n  Cantidad: "+item.getCantidad()+" unidades");
+	System.out.println("-----------------------------------------------------------------------------" );
+	System.out.println("\n"+"\n"+"\n" );
+	
+}
 
 }

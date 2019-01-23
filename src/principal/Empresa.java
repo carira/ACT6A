@@ -15,12 +15,18 @@ public class Empresa {
 			this.emleados = emleados;
 			this.direccion = direccion;
 		}
+	
+		
+		
+		
 		public String getCif() {
 			return cif;
 		}
+
 		public void setCif(String cif) {
 			this.cif = cif;
 		}
+
 		public String getNombre() {
 			return nombre;
 		}
